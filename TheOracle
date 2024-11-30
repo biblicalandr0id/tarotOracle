@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Oracle: Mystical Insight</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap');
+
+        body {
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            font-family: 'Cormorant Garamond', serif;
+            color: #e0e0e0;
+        }
+
+        .card-backdrop {
+            background: rgba(22, 33, 62, 0.7);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tarot-card {
+            perspective: 1000px;
+            transition: transform 0.6s;
+        }
+
+        .tarot-card:hover {
+            transform: rotateY(20deg);
+        }
+
+        .mystical-glow {
+            box-shadow: 0 0 30px rgba(99, 102, 241, 0.5);
+        }
+
+        .constellation-background {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(#ffffff 1px, transparent 1px),
+                radial-gradient(#ffffff 1px, transparent 1px);
+            background-position: 0 0, 25px 25px;
+            background-size: 50px 50px;
+            opacity: 0.1;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col">
+    <div class="constellation-background"></div>
+    
+    <header class="p-6 bg-opacity-20 backdrop-filter backdrop-blur-lg">
+        <div class="container mx-auto flex justify-between items-center">
+            <h1 class="text-4xl font-bold text-indigo-300 tracking-wider">
+                The Oracle
+            </h1>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="#" class="text-white hover:text-indigo-300 transition">Readings</a></li>
+                    <li><a href="#" class="text-white hover:text-indigo-300 transition">Profile</a></li>
+                    <li><a href="#" class="text-white hover:text-indigo-300 transition">Library</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto px-4 py-12">
+        <section class="grid md:grid-cols-2 gap-12">
+            <div class="card-backdrop p-8 rounded-2xl">
+                <h2 class="text-3xl mb-6 text-indigo-300 font-bold">Daily Mystical Insight</h2>
+                
+                <div id="dailyReading" class="space-y-4">
+                    <div class="flex items-center space-x-4 tarot-card">
+                        <div class="w-24 h-36 bg-gray-700 rounded-lg mystical-glow"></div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white">Past Influence</h3>
+                            <p class="text-gray-300">Unveiling hidden energies and past connections</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 tarot-card">
+                        <div class="w-24 h-36 bg-gray-700 rounded-lg mystical-glow"></div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white">Current Journey</h3>
+                            <p class="text-gray-300">Exploring present moment's spiritual landscape</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-4 tarot-card">
+                        <div class="w-24 h-36 bg-gray-700 rounded-lg mystical-glow"></div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white">Future Potential</h3>
+                            <p class="text-gray-300">Glimpsing transformative paths ahead</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="generateReading" class="mt-6 w-full py-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition">
+                    Reveal Your Insight
+                </button>
+            </div>
+
+            <div class="card-backdrop p-8 rounded-2xl">
+                <h2 class="text-3xl mb-6 text-indigo-300 font-bold">Personal Intention</h2>
+                
+                <textarea 
+                    id="intentionInput" 
+                    rows="4" 
+                    class="w-full bg-gray-800 text-white rounded-lg p-4 mb-4 border border-gray-700 focus:ring-2 focus:ring-indigo-500"
+                    placeholder="What guidance do you seek? Share your intention..."
+                ></textarea>
+
+                <div class="grid grid-cols-3 gap-4">
+                    <button class="py-2 bg-gray-700 hover:bg-indigo-600 text-white rounded-lg">
+                        Love
+                    </button>
+                    <button class="py-2 bg-gray-700 hover:bg-indigo-600 text-white rounded-lg">
+                        Career
+                    </button>
+                    <button class="py-2 bg-gray-700 hover:bg-indigo-600 text-white rounded-lg">
+                        Personal Growth
+                    </button>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="p-6 text-center text-gray-400">
+        <p>© 2024 The Oracle. All mystical rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const generateReadingBtn = document.getElementById('generateReading');
+            const intentionInput = document.getElementById('intentionInput');
+            const dailyReadingContainer = document.getElementById('dailyReading');
+
+            generateReadingBtn.addEventListener('click', async () => {
+                const intention = intentionInput.value || 'General Guidance';
+                
+                try {
+                    // Simulated reading generation 
+                    const mockReading = {
+                        cards: [
+                            { name: 'The Hermit', meaning: 'Introspection and inner wisdom' },
+                            { name: 'The Lovers', meaning: 'Harmonious connections and choices' },
+                            { name: 'The Star', meaning: 'Hope, inspiration, and renewal' }
+                        ],
+                        interpretation: `Your journey of ${intention} reveals profound transformative potential...`
+                    };
+
+                    updateDailyReading(mockReading);
+                } catch (error) {
+                    console.error('Reading generation failed:', error);
+                }
+            });
+
+            function updateDailyReading(reading) {
+                dailyReadingContainer.innerHTML = reading.cards.map((card, index) => `
+                    <div class="flex items-center space-x-4 tarot-card">
+                        <div class="w-24 h-36 bg-gray-700 rounded-lg mystical-glow"></div>
+                        <div>
+                            <h3 class="text-xl font-semibold text-white">${card.name}</h3>
+                            <p class="text-gray-300">${card.meaning}</p>
+                        </div>
+                    </div>
+                `).join('');
+
+                const interpretationElement = document.createElement('div');
+                interpretationElement.className = 'mt-4 p-4 bg-gray-800 rounded-lg';
+                interpretationElement.innerHTML = `
+                    <h3 class="text-2xl text-indigo-300 mb-2">Your Mystical Insight</h3>
+                    <p class="text-gray-200">${reading.interpretation}</p>
+                `;
+
+                dailyReadingContainer.appendChild(interpretationElement);
+            }
+        });
+    </script>
+</body>
+</html>
